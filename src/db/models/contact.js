@@ -13,12 +13,7 @@ const contactSchema = new Schema(
       required: true,
       default: 'personal',
     },
-<<<<<<< Updated upstream
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-=======
-    photo: { type: String },
-    userId: { type: Schema.ObjectId, required: false },
->>>>>>> Stashed changes
   },
   { timestamps: true, versionKey: false }
 );

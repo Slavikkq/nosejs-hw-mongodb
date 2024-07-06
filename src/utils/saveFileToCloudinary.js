@@ -1,12 +1,7 @@
 import cloudinary from 'cloudinary';
-<<<<<<< Updated upstream
 
 import { env } from './env.js';
 import { CLOUDINARY } from '../constants/index.js';
-=======
-import { env } from './env.js';
-import { CLOUDINARY } from '../constants/constants.js';
->>>>>>> Stashed changes
 
 cloudinary.v2.config({
   secure: true,
