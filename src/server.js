@@ -7,7 +7,13 @@ import router from './routers/index.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { env } from './utils/env.js';
+<<<<<<< Updated upstream
 
+=======
+import rootRouter from './routers/index.js';
+import { errorHandler } from './middlewares/errorHandler.js';
+import { UPLOAD_DIR } from './constants/constants.js';
+>>>>>>> Stashed changes
 
 const PORT = Number(env('PORT', '3000'));
 export const setupServer = () => {
@@ -37,6 +43,10 @@ export const setupServer = () => {
 
   app.use(errorHandler);
 
+<<<<<<< Updated upstream
+=======
+  app.use('/uploads', express.static(UPLOAD_DIR));
+>>>>>>> Stashed changes
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}!`);

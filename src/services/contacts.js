@@ -1,6 +1,10 @@
 import { ContactsCollection } from '../db/models/contact.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
+<<<<<<< Updated upstream
 import { SORT_ORDER } from '../constants/index.js';
+=======
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+>>>>>>> Stashed changes
 
 export const getAllContacts = async ({
   page = 1,
@@ -38,6 +42,7 @@ export const getAllContacts = async ({
     ...paginationData,
   };
 };
+<<<<<<< Updated upstream
   
   export const getContactById = async (contactId, userId) => {
     const contact = await ContactsCollection.findOne({ _id: contactId, userId });
@@ -76,3 +81,33 @@ export const getAllContacts = async ({
   
     return contact;
   };
+=======
+
+export const getContactById = async (contactId, userId) => {
+  return await ContactsCollection.findOne({ _id: contactId, userId: userId });
+};
+
+export const createContact = async (payload, userId) => {
+  return await ContactsCollection.create({
+    ...payload,
+    userId: userId,
+  });
+};
+
+export const updateContact = async (contactId, userId, updateData) => {
+  return await ContactsCollection.findOneAndUpdate(
+    { _id: contactId, userId: userId },
+    updateData,
+    { new: true },
+  );
+};
+
+export const deleteContact = async (contactId, userId) => {
+  const contact = await ContactsCollection.findOneAndDelete({
+    _id: contactId,
+    userId: userId,
+  });
+
+  return contact;
+};
+>>>>>>> Stashed changes
