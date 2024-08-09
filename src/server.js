@@ -1,18 +1,31 @@
-import cookieParser from 'cookie-parser';
 import express from 'express';
-import pino from 'pino-http';
 import cors from 'cors';
-import authRouters from './routers/auth.js';
-import contactsRouter from './routers/contacts.js';
+import pino from 'pino-http';
+import cookieParser from 'cookie-parser';
+
 import dotenv from 'dotenv';
+import { env } from './utils/env.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
+import router from './routers/index.js';
+
 dotenv.config();
 
-export function setupServer() {
+const PORT = Number(env('PORT', '3000'));
+
+export const setupServer = () => {
   const app = express();
-  const PORT = Number(process.env.PORT) || 4000;
+
+  app.use(
+    express.json({
+      type: ['application/json', 'application/vnd.api+json'],
+      limit: '100kb',
+    }),
+  );
+  app.use(cors());
+
+  app.use(cookieParser());
 
   app.use(
     pino({
@@ -22,21 +35,30 @@ export function setupServer() {
     }),
   );
 
-  app.use(cors());
+  // Додаємо роутер
+  app.use(router);
 
-  app.use(express.json());
+  // Обробник для неіснуючих маршрутів
+  app.use('*', (req, res) => {
+    res.status(404).json({
+      message: 'Not found',
+    });
+  });
 
-  app.use(cookieParser());
-
-  app.use(authRouters);
-
-  app.use(contactsRouter);
+  // Глобальний обробник помилок
+  app.use((err, req, res) => {
+    res.status(500).json({
+      message: 'Something went wrong',
+      error: err.message,
+    });
+  });
 
   app.use('*', notFoundHandler);
 
   app.use(errorHandler);
 
+  // Запуск сервера
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
-}
+};

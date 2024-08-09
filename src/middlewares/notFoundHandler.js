@@ -1,3 +1,5 @@
-export const notFoundHandler = (_req, res, _next) => {
-  res.status(404).send('Route not found');
+export const notFoundHandler = (req, res, next) => {
+  res.status(404).json({
+    message: 'Contact not found',
+  });
 };
