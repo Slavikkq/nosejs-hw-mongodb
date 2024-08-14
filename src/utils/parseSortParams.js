@@ -7,15 +7,18 @@ const parseSortOrder = (sortOrder) => {
 };
 
 const parseSortBy = (sortBy) => {
-  const keysOfContacts = [
+  const keysOfContact = [
     '_id',
     'name',
     'phoneNumber',
     'email',
-    'isFavourite',
     'contactType',
+    'isFavourite',
+    'createdAt',
+    'updatedAt',
   ];
-  if (keysOfContacts.includes(sortBy)) {
+
+  if (keysOfContact.includes(sortBy)) {
     return sortBy;
   }
   return '_id';
@@ -23,12 +26,11 @@ const parseSortBy = (sortBy) => {
 
 export const parseSortParams = (query) => {
   const { sortOrder, sortBy } = query;
-
   const parsedSortOrder = parseSortOrder(sortOrder);
-  const parsedSortBy = parseSortBy(sortBy);
+  const parsedSortby = parseSortBy(sortBy);
 
   return {
     sortOrder: parsedSortOrder,
-    sortBy: parsedSortBy,
+    sortBy: parsedSortby,
   };
 };

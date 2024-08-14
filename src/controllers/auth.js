@@ -1,10 +1,10 @@
+import { REFRESH_TOKEN_TTL } from '../constants/index.js';
 import {
-  registerUser,
   loginUser,
   logoutUser,
   refreshUsersSession,
+  registerUser,
 } from '../services/auth.js';
-import { ONE_DAY } from '../constants/index.js';
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -21,11 +21,12 @@ export const loginUserController = async (req, res) => {
 
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
+    expires: new Date(Date.now() + REFRESH_TOKEN_TTL),
   });
+
   res.cookie('sessionId', session._id, {
     httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
+    expires: new Date(Date.now() + REFRESH_TOKEN_TTL),
   });
 
   res.json({
@@ -37,25 +38,14 @@ export const loginUserController = async (req, res) => {
   });
 };
 
-export const logoutUserController = async (req, res) => {
-  if (req.cookies.sessionId) {
-    await logoutUser(req.cookies.sessionId);
-  }
-
-  res.clearCookie('sessionId');
-  res.clearCookie('refreshToken');
-
-  res.status(204).send();
-};
-
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
+    expires: new Date(Date.now() + REFRESH_TOKEN_TTL),
   });
   res.cookie('sessionId', session._id, {
     httpOnly: true,
-    expires: new Date(Date.now() + ONE_DAY),
+    expires: new Date(Date.now() + REFRESH_TOKEN_TTL),
   });
 };
 
@@ -74,4 +64,15 @@ export const refreshUserSessionController = async (req, res) => {
       accessToken: session.accessToken,
     },
   });
+};
+
+export const logoutUserController = async (req, res) => {
+  if (req.cookies.sessionId) {
+    await logoutUser(req.cookies.sessionId);
+  }
+
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
+
+  res.status(204).send();
 };

@@ -12,17 +12,16 @@ const contactsSchema = new Schema(
     },
     email: {
       type: String,
-      required: true | false,
+    },
+    contactType: {
+      type: String,
+      required: true,
+      enum: ['work', 'home', 'personal'],
+      default: 'personal',
     },
     isFavourite: {
       type: Boolean,
       default: false,
-    },
-    contactType: {
-      type: String,
-      enum: ['work', 'home', 'personal'],
-      required: true,
-      default: 'personal',
     },
     userId: { type: Schema.Types.ObjectId, ref: 'users', required: true },
   },
