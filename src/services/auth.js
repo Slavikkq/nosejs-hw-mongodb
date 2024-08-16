@@ -17,11 +17,6 @@ import handlebars from 'handlebars';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 
-import { ACCESS_TOKEN_TTL, REFRESH_TOKEN_TTL } from '../constants/index.js';
-import { SessionsCollection } from '../db/models/Session.js';
-import { UsersCollection } from '../db/models/User.js';
-
-
 export const registerUser = async (payload) => {
   const user = await UsersCollection.findOne({
     email: payload.email,
