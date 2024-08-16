@@ -8,7 +8,7 @@ import {
 } from '../controllers/contacts.js';
 import { authenticate } from '../middlewares/authenticate.js';
 
-import { isValidId } from '../middlewares/isValidId.js';
+import { isValidId } from '../middlewares/isValidid.js';
 import { upload } from '../middlewares/multer.js';
 
 import { validateBody } from '../middlewares/validateBody.js';
