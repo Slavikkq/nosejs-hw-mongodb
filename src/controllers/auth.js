@@ -1,14 +1,20 @@
 
+import { 
+ registerUser,
+ loginUser,
+ logoutUser,
+ refreshUsersSession,
+ requestResetToken,
+ resetPassword 
+       } from '../services/auth.js';
+       
+import { ONE_DAY } from '../constants/index.js';
+import { generateAuthUrl } from '../utils/googleOAuth2.js';
+
+
 import createHttpError from 'http-errors';
 import { REFRESH_TOKEN_TTL } from '../constants/index.js';
-import {
-  loginUser,
-  logoutUser,
-  refreshUsersSession,
-  registerUser,
-  resetPassword,
-  sendResetToken,
-} from '../services/auth.js';
+
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -89,6 +95,18 @@ export const sendResetEmailController = async (req, res, next) => {
       status: 200,
       data: {},
     });
+
+  };
+
+export const getGoogleOAuthUrlController = async (req, res) => {
+  const url = generateAuthUrl();
+  res.json({
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: {
+      url,
+    },
+
   } catch (err) {
     createHttpError(500, 'Failed to send the email, please try again later.');
     next(err);
@@ -101,5 +119,6 @@ export const resetPasswordController = async (req, res) => {
     message: 'Password was successfully reset!',
     status: 200,
     data: {},
+
   });
 };
