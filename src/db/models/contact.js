@@ -12,23 +12,25 @@ const contactsSchema = new Schema(
     },
     email: {
       type: String,
-    },
-    contactType: {
-      type: String,
-      required: true,
-      enum: ['work', 'home', 'personal'],
-      default: 'personal',
+      required: false,
     },
     isFavourite: {
       type: Boolean,
       default: false,
     },
-    userId: { type: Schema.Types.ObjectId, ref: 'users', required: true },
-
+    contactType: {
+      type: String,
+      enum: ['work', 'home', 'personal'],
+      required: true,
+      default: 'personal',
+    },
+    userId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
     photo: {
       type: String,
     },
-
   },
   {
     timestamps: true,
