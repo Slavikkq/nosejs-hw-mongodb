@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import {
-  createContactController,
-  deleteContactController,
-  getContactByIdController,
-  getContactsController,
-  patchContactController,
+    getAllContacts,
+  getContactById,
+  createContact,
+  patchContact,
+  deleteContact,
 } from '../controllers/contacts.js';
 import { authenticate } from '../middlewares/authenticate.js';
 
