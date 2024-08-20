@@ -1,12 +1,20 @@
 import path from 'node:path';
 
+export const ENV_VARS = {
+  PORT: 'PORT',
+  MONGODB_USER: 'MONGODB_USER',
+  MONGODB_PASSWORD: 'MONGODB_PASSWORD',
+  MONGODB_URL: 'MONGODB_URL',
+  MONGODB_DB: 'MONGODB_DB',
+};
+
 export const SORT_ORDER = {
   ASC: 'asc',
   DESC: 'desc',
 };
 
-export const ACCESS_TOKEN_TTL = 15 * 60 * 1000; //15minutes
-export const REFRESH_TOKEN_TTL = 30 * 24 * 60 * 60 * 1000; //30days
+export const FIFTEEN_MINUTES = 15 * 60 * 1000;
+export const ONE_DAY = 24 * 60 * 60 * 1000;
 
 export const SMTP = {
   SMTP_HOST: 'SMTP_HOST',
@@ -26,3 +34,8 @@ export const CLOUDINARY = {
   API_KEY: 'API_KEY',
   API_SECRET: 'API_SECRET',
 };
+
+export const APP_DOMAIN = 'APP_DOMAIN';
+export const JWT_SECRET = 'JWT_SECRET';
+export const BACK_DOMAIN = 'BACK_DOMAIN';
+export const SWAGGER_PATH = path.join(process.cwd(), 'docs', 'swagger.json');

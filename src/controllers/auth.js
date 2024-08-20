@@ -1,20 +1,15 @@
-
-import { 
- registerUser,
- loginUser,
- logoutUser,
- refreshUsersSession,
- requestResetToken,
- resetPassword 
-       } from '../services/auth.js';
-       
+import {
+  registerUser,
+  loginUser,
+  logoutUser,
+  refreshUsersSession,
+  requestResetToken,
+  resetPassword,
+  loginOrSignupWithGoogle,
+} from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
+
 import { generateAuthUrl } from '../utils/googleOAuth2.js';
-
-
-import createHttpError from 'http-errors';
-import { REFRESH_TOKEN_TTL } from '../constants/index.js';
-
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -31,12 +26,11 @@ export const loginUserController = async (req, res) => {
 
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
-    expires: new Date(Date.now() + REFRESH_TOKEN_TTL),
+    expires: new Date(Date.now() + ONE_DAY),
   });
-
   res.cookie('sessionId', session._id, {
     httpOnly: true,
-    expires: new Date(Date.now() + REFRESH_TOKEN_TTL),
+    expires: new Date(Date.now() + ONE_DAY),
   });
 
   res.json({
@@ -48,14 +42,25 @@ export const loginUserController = async (req, res) => {
   });
 };
 
+export const logoutUserController = async (req, res) => {
+  if (req.cookies.sessionId) {
+    await logoutUser(req.cookies.sessionId);
+  }
+
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
+
+  res.status(204).send();
+};
+
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
-    expires: new Date(Date.now() + REFRESH_TOKEN_TTL),
+    expires: new Date(Date.now() + ONE_DAY),
   });
   res.cookie('sessionId', session._id, {
     httpOnly: true,
-    expires: new Date(Date.now() + REFRESH_TOKEN_TTL),
+    expires: new Date(Date.now() + ONE_DAY),
   });
 };
 
@@ -76,27 +81,24 @@ export const refreshUserSessionController = async (req, res) => {
   });
 };
 
-export const logoutUserController = async (req, res) => {
-  if (req.cookies.sessionId) {
-    await logoutUser(req.cookies.sessionId);
-  }
+export const requestResetEmailController = async (req, res) => {
+  await requestResetToken(req.body.email);
 
-  res.clearCookie('sessionId');
-  res.clearCookie('refreshToken');
-
-  res.status(204).send();
+  res.json({
+    message: 'Reset password email has been successfully sent.',
+    status: 200,
+    data: {},
+  });
 };
 
-export const sendResetEmailController = async (req, res, next) => {
-  try {
-    await sendResetToken(req.body.email);
-    res.json({
-      message: 'Reset password email was successfully sent!',
-      status: 200,
-      data: {},
-    });
-
-  };
+export const resetPasswordController = async (req, res) => {
+  await resetPassword(req.body);
+  res.json({
+    message: 'Password has been successfully reset.',
+    status: 200,
+    data: {},
+  });
+};
 
 export const getGoogleOAuthUrlController = async (req, res) => {
   const url = generateAuthUrl();
@@ -106,19 +108,18 @@ export const getGoogleOAuthUrlController = async (req, res) => {
     data: {
       url,
     },
-
-  } catch (err) {
-    createHttpError(500, 'Failed to send the email, please try again later.');
-    next(err);
-  }
+  });
 };
 
-export const resetPasswordController = async (req, res) => {
-  await resetPassword(req.body);
-  res.json({
-    message: 'Password was successfully reset!',
-    status: 200,
-    data: {},
+export const loginWithGoogleController = async (req, res) => {
+  const session = await loginOrSignupWithGoogle(req.body.code);
+  setupSession(res, session);
 
+  res.json({
+    status: 200,
+    message: 'Successfully logged in via Google OAuth!',
+    data: {
+      accessToken: session.accessToken,
+    },
   });
 };
