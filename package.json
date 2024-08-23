@@ -1,18 +1,17 @@
 {
-  "name": "nodejs-hw-mongodb",
+  "name": "nosejs-hw-mongodb",
   "version": "1.0.0",
+  "description": "",
   "type": "module",
-  "main": "src/index.js",
+  "main": "index.js",
   "scripts": {
     "lint": "eslint src/**/*.js",
     "start": "node ./src/index.js",
-    "dev": "nodemon src/index.js",
-    "build": "npm run build-docs",
-    "build-docs": "redocly bundle --ext json -o docs/swagger.json",
-    "preview-docs": "redocly preview-docs"
-  },
+    "dev": "nodemon src/index.js"
+  }, 
+
   "keywords": [],
-  "author": "",
+  "author": "Yaroslav Manulyak yaroslavmanuljak@gmail.com",
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.3.0",
@@ -23,7 +22,8 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "cloudinary": "^2.2.0",
+    "cloudinary": "^2.4.0",
+
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -37,8 +37,9 @@
     "mongoose": "^8.4.4",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.14",
-    "pino-http": "^10.2.0",
-    "swagger-ui-express": "^5.0.1"
+
+    "pino-http": "^10.2.0"
+
+
   },
-  "description": ""
-}
+  "description": 
