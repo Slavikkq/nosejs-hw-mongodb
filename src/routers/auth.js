@@ -1,29 +1,50 @@
-import { Router } from 'express';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { loginUserSchema, registerUserSchema } from '../validation/auth.js';
+import express from 'express';
 import {
-  loginUserController,
-  logoutUserController,
-  refreshUserSessionController,
-  registerUserController,
-} from '../controllers/auth.js';
+  getContactsController,
+  getContactByIdController,
+  createContactController,
+  patchContactController,
+  deleteContactController,
+} from '../controllers/contacts.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
+import { isValidId } from '../middlewares/isValidId.js';
+import {
+  createContactSchema,
+  updateContactSchema,
+} from '../validation/contacts.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
-const router = Router();
+import { upload } from '../middlewares/multer.js';
+
+const router = express.Router();
+const jsonParser = express.json({
+  type: ['application/json', 'application/vnd.api+json'],
+  limit: '100kb',
+});
+
+router.use(authenticate);
+router.get('/', ctrlWrapper(getContactsController));
+
+router.get('/:contactId', isValidId, ctrlWrapper(getContactByIdController));
 
 router.post(
-  '/register',
-  validateBody(registerUserSchema),
-  ctrlWrapper(registerUserController),
+  '',
+  jsonParser,
+  upload.single('photo'),
+  validateBody(createContactSchema),
+  ctrlWrapper(createContactController),
 );
 
-router.post(
-  '/login',
-  validateBody(loginUserSchema),
-  ctrlWrapper(loginUserController),
+router.patch(
+  '/:contactId',
+  jsonParser,
+  upload.single('photo'),
+  isValidId,
+  validateBody(updateContactSchema),
+  ctrlWrapper(patchContactController),
 );
 
-router.post('/refresh', ctrlWrapper(refreshUserSessionController));
+router.delete('/:contactId', isValidId, ctrlWrapper(deleteContactController));
 
-router.post('/logout', ctrlWrapper(logoutUserController));
 export default router;
