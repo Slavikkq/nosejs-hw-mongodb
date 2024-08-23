@@ -9,8 +9,9 @@
     "start": "node ./src/index.js",
     "dev": "nodemon src/index.js"
   },
+
   "keywords": [],
-  "author": "",
+  "author": "Yaroslav Manulyak yaroslavmanuljak@gmail.com",
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.3.0",
@@ -34,6 +35,8 @@
     "mongoose": "^8.4.4",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.14",
+
     "pino-http": "^10.2.0"
   }
 }
+
