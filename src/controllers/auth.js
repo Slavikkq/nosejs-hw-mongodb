@@ -5,8 +5,10 @@ import {
   refreshUsersSession,
   requestResetToken,
   resetPassword,
+
 } from '../services/auth.js';
 import { ONE_DAY } from '../constants/index.js';
+
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -95,4 +97,6 @@ export const resetPasswordController = async (req, res) => {
     status: 200,
     data: {},
   });
+
 };
+

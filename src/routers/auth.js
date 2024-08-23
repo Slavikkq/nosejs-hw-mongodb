@@ -1,50 +1,54 @@
 import express from 'express';
-import {
-  getContactsController,
-  getContactByIdController,
-  createContactController,
-  patchContactController,
-  deleteContactController,
-} from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-import { validateBody } from '../middlewares/validateBody.js';
-import { isValidId } from '../middlewares/isValidId.js';
 import {
-  createContactSchema,
-  updateContactSchema,
-} from '../validation/contacts.js';
-import { authenticate } from '../middlewares/authenticate.js';
-
-import { upload } from '../middlewares/multer.js';
+  registerUserSchema,
+  loginUserSchema,
+  requestResetEmailSchema,
+  resetPasswordSchema,
+} from '../validation/auth.js';
+import {
+  registerUserController,
+  loginUserController,
+  logoutUserController,
+  refreshUserSessionController,
+  requestResetEmailController,
+  resetPasswordController,
+} from '../controllers/auth.js';
+import { validateBody } from '../middlewares/validateBody.js';
 
 const router = express.Router();
-const jsonParser = express.json({
-  type: ['application/json', 'application/vnd.api+json'],
-  limit: '100kb',
-});
-
-router.use(authenticate);
-router.get('/', ctrlWrapper(getContactsController));
-
-router.get('/:contactId', isValidId, ctrlWrapper(getContactByIdController));
+const jsonParser = express.json();
 
 router.post(
-  '',
+  '/register',
   jsonParser,
-  upload.single('photo'),
-  validateBody(createContactSchema),
-  ctrlWrapper(createContactController),
+  validateBody(registerUserSchema),
+  ctrlWrapper(registerUserController),
 );
 
-router.patch(
-  '/:contactId',
+router.post(
+  '/login',
   jsonParser,
-  upload.single('photo'),
-  isValidId,
-  validateBody(updateContactSchema),
-  ctrlWrapper(patchContactController),
+  validateBody(loginUserSchema),
+  ctrlWrapper(loginUserController),
 );
 
-router.delete('/:contactId', isValidId, ctrlWrapper(deleteContactController));
+router.post('/logout', jsonParser, ctrlWrapper(logoutUserController));
+
+router.post('/refresh', jsonParser, ctrlWrapper(refreshUserSessionController));
+
+router.post(
+  '/send-reset-email',
+  jsonParser,
+  validateBody(requestResetEmailSchema),
+  ctrlWrapper(requestResetEmailController),
+);
+
+router.post(
+  '/reset-password',
+  jsonParser,
+  validateBody(resetPasswordSchema),
+  ctrlWrapper(resetPasswordController),
+);
 
 export default router;
