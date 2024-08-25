@@ -42,6 +42,7 @@ export const setupServer = () => {
   app.use(router);
 
   app.use('/uploads', express.static(UPLOAD_DIR));
+  app.use('/api-docs', swaggerDocs());
 
   // Обробник для неіснуючих маршрутів
   app.use('*', (req, res) => {
